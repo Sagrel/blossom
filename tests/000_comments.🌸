@@ -1,0 +1,13 @@
+; We use the semicolon for comments, as we do not need it for separating statements in blossom
+; They act by default as the // does in the C family of languages
+; We also have the equivalent of the /* */ by just using ;; ;; that can be used multiline or only for commenting a part of a line
+; Do note that we can nest the double semicolons, unlike in C and C++
+
+; This is a simple comment
+;; This
+is
+a
+multiline
+comment;; ; And this is another comment ; Still a comment
+
+

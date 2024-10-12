@@ -1,0 +1,26 @@
+; In blossom we support normal integers and real numbers (using the dot)
+; We also support the use of underscores in numbers, but not at the end or beginning
+
+; Ints
+1
+123
+0213	; Error! Numbers starting with 0 are used for specific formats like hex or binary, but the format was not ok TODO add tests for those
+123534656748678879789 ; Error! To big of a literal
+
+; Reals
+213.123
+0.123
+12312.0
+1.2341324564567564756756 ; Error! Not enough precission
+
+; Underscores
+123_123
+123_12.213
+123_12.213_34
+12.213_34
+
+_12 ; Error! Leading underscore is not allowed
+12_ ; Error! Trailing underscore is not allowed
+
+12._ ; Error! Trailing underscore is not allowed
+_.234 ; Error! Leading underscore is not allowed

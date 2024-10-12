@@ -1,0 +1,58 @@
+; In Blossom we support many types
+
+
+; Basic types and provide some alliases
+
+int : Int
+integer : Integer
+
+real : Real =
+
+; Structs are the basic way of grouping different values. The type of structs is always Type
+
+Void : Type = []
+Point := [x : Real, y : Real]
+
+
+; Arrays are just structs where all the elements have the same type and are unnamed. We have syntactic sugar for the size
+
+array3 : [Int * 3] = [1, 2, 3]
+array4 : [4 * Int] = [1, 2, 3, 4]
+array9 : [3 * 3 * Int] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+array4 : [2 * Int * 2] = [1, 2, 3, 4]
+
+; Variants allow for tagged uniongs, or enums if the tags have no values
+
+Number := [Int or Real]
+Color := [RGB := [r : Int, g : Int, b : Int] or Hex := [Text]]
+Direction := [[North] or [South] or [EAST] or [WEST]]
+
+
+number : ;; Should be infered to [Int or Real] ;; = if rand() > 0.5 { Int::[1] } else { Real::[1.1] }
+
+
+; Aliases and new types
+
+; In the compiler we define Int as an alias, like this: Int := Integer
+int : Int = 1
+int := Integer::[2]
+assert int == 2
+
+; This creates a new type, you cannot assign Distance to Point or viceversa
+Distance := [Point]
+
+; An annonymous tuple can convert to anything that matches the types contained (in the same order, and unnamed can turn into named, but named must match)
+
+p := Point::[0, 0]
+p = [1, 1]
+p = [1, y:=2]
+p = [x:=1, 2]
+p = [y:=1, x:=2] 
+p = [1] ; Error! Not enough elements
+p = [1, 2, 3] ; Error! Too many elements
+p = [1.1, 2.3] ; Error! Type missmatch
+p = [y:=1, 1] ; Error! The x field must be set by name or possitionaly before setting y
+p = [x:=1, x:1] ; Error! You cannot define the x field many times
+
+; Functions
+

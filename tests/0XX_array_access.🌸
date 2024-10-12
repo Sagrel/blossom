@@ -1,0 +1,29 @@
+; In Blossom array access is done witht a default overload of the call operator, not with square brackets
+; The same applies to other standard collections
+
+array : [Int * 3] = [1, 2, 3]
+
+assert array(1) == 2
+
+list := List::new()
+list.push(1)
+list.push(2)
+list.push(3)
+
+assert list(1) == 2
+
+dict := Dict::new()
+dict.add("first", 1)
+dict.add("second", 2)
+dict.add("third", 3)
+
+assert dict("second") == 2
+
+matrix := Matrix2x2::new([
+	[1, 2],
+	[3, 4]
+])
+
+; Multiple overloads of the call operator are allowed
+assert matrix(1,1) == 4 
+assert matrix(0) == 1 
