@@ -1,0 +1,14 @@
+main := () -> {
+	; The main features being used are the UFC, the match over arrays of dynamic size and the collect from Iter<[A, B]> to [List<A>, List<B>]
+	[left, right] : [List<Nat>, List<Nat>] = File("day-01-input").read_lines.filter_map((line) -> { 
+	 match line.split {
+	 	[Text[first], Text[second]] -> {
+			[first.parse<Nat>, second.parse<Nat>]
+		},
+		_ -> []
+	 } 
+	}).collect
+
+	; Here just UFC is showcased
+	zip(left.sorted, right.sorted).map((l,r) -> { (l-r).abs }).sum.print
+}
