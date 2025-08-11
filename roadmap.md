@@ -1,0 +1,100 @@
+# Roadmap
+
+Creating a programming language is a long process, so in this section I map out the full list of steps that I have planned.
+
+Each version is separated in language and tooling objectives, as they are mostly independent, but tooling is crucial for a language to be usefull!
+
+Note that this page is just a roadmap, with checkboxes to track progres. It does not contain in depth analisys or my though process.
+
+- [ ] Blossom v1 - The beggining:  
+	- Language
+		- [ ] Basic support for primitive types and literals: Text, Int, Real, Bool, Lambda, ...
+		- [ ] Basic support for defining external functions
+		- [ ] UFCS
+		- [ ] Function overloading
+		- [ ] If statement
+		- [ ] Comments
+		- [ ] Single file
+	- Tooling
+		- [ ] Basic CLI tool that compiles 1 file at a time
+			- [ ] Tokenizer
+			- [ ] Flat Ast parser
+			- [ ] Bidirectional type checker with no unification pass
+			- [ ] Nice error reporting
+			- [ ] Code generation with Cranelift
+			- [ ] Auto formating
+			- [ ] Stat collection (performance, number of instances, ...)
+			- [ ] Detailed tracing
+			- [ ] Setup for snapshot and fuzz testing
+- [ ] Blossom v2 - Expanding:
+	- Language
+		- [ ] Multi file support (no circular dependencies)
+		- [ ] Visibility modifiers
+		- [ ] namespacing
+	- Tooling
+		- [ ] Watch command that is resilient and does not crash
+		- [ ] Multi threading
+		- [ ] Caching
+- [ ] Blossom v3 - Let there be structure:
+	- Language
+		- [ ] Structured types
+			- [ ] Tuples (unnamed fields)
+			- [ ] Records (named fields)
+			- [ ] Variants (tagged unions)
+		- [ ] Closures
+		- [ ] Automatically call `drop` at the end of the scope
+	- Tooling
+		- [ ] Simple LSP server
+			- [ ] Syntax highligting
+			- [ ] Type information on hover
+			- [ ] Inlay hints
+			- [ ] Go to definition
+			- [ ] Run project (automatically downloads the compiler)
+			- [ ] Reuses the cached information from the compiler
+
+- [ ] Blossom v4 - Another generic name:
+	- Language
+		- [ ] Generic functions
+		- [ ] Generic structs
+		- [ ] Generic inference
+		- [ ] Interfaces
+	- Tooling
+		- [ ] Doc generator
+		- [ ] Debug information
+- [ ] Blossom v5 - It's a match!:
+	- Language
+		- [ ] Exhaustive pattern matching
+		- [ ] Everything is a pattern
+	- Tooling
+		- [ ] Maintenance
+- [ ] Blossom v6 - May I borrow that?:
+	- Language
+		- [ ] Borrow checking
+	- Tooling
+		- [ ] Maintenance
+- [ ] Blossom v7 - Effects:
+	- Language
+		- [ ] Stackless cooroutines
+		- [ ] Algebraic effect tracking
+		- [ ] Syntax for using effects
+		- [ ] For loop syntactic sugar
+		- [ ] Effect based iterator library
+		- [ ] Effect based async library
+	- Tooling
+		- [ ] Maintenance
+- [ ] Blossom v8 - Going meta:
+	- Language
+		- [ ] Meta programming capabilities
+			- [ ] Compile time `if`
+			- [ ] Compile time `for`
+			- [ ] Compile time error -> Enables linear types
+	- Tooling
+		- [ ] Maintenance
+- [ ] Blossom v9+ - The future:
+	- Language
+		- [ ] Dependent types, where an Int from 0 to 7 is a day of the week
+	- Tooling
+		- [ ] [DAP](https://microsoft.github.io/debug-adapter-protocol/)
+		- [ ] Profiling instrumentation
+		- [ ] Package manager
+		- [ ] Hot reloading

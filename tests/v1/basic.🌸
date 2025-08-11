@@ -1,0 +1,19 @@
+; This funtion is provided by the compiler.
+print := (value: Text) -> [] external
+
+main := () -> {
+	; We can use UFCS and also omit the parentheses if there are no other arguments.
+	69_420.to_text().print
+
+	; We can also use the function directly.
+	print("Hello" + " World!")
+
+	; Operators are functions too!
+	add : (Int, Int) -> Int = (+)
+
+	if add(1, 2) == 3 and True {
+		print("1 + 2 = 3")
+	} else {
+		print("1 + 2 != 3")
+	}
+}

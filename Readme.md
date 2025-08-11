@@ -3,48 +3,11 @@
 One of my dreams is to create my own programming language, and I have made some attempts before (you can find them in my profile), but they were failures (for my standard)
 
 In this repo I plan to fully specify the blossom language 🌸! I want to have a complete specification and set of tests before writing a single line of code.
-My hope is that having a target goal and a set of tests that work as progress trackers and a TODO list, I will be able to make steady progress on it this time 🤞
+
+My hope is that having a clear roadmap to target and a set of tests to verify my desing before implementing it, I will create the foundation needed to reach my goals 🤞
 
 # Feature of the language
 
-In this section I will list, in no particular order, all the feature that I would like the language to support
-- Ownership and borrowing semantics (like rust)
-- Linear types as descrived [here](https://without.boats/blog/ownership/)
-- Pattern matching 
-	- Exhaustibvity and non redundancy checks [like implemented in rust](https://doc.rust-lang.org/beta/nightly-rustc/rustc_pattern_analysis/usefulness/index.html)
-	- Everything is a pattern mentality
-- Some support for [dependent types](https://stackoverflow.com/questions/9338709/what-is-dependent-typing)
-- UFCS
-- Function overloading
-- Generics
-	- Some constraint system for generics (contracts in C++)
-- Compile time meta programing
-	- Being able to get information about types (kind of like zig)
-	- Being able to create new types (kind of like zig)
-	- Being able to take tokens and generate code (rust macros) or is a string enough (so just like zig?)
-- Yield and I gues async
-- Variant types and records with consistent syntax
-- Everything is a literal mentality
-- Everything is annonymous mentality
-- Structural and nominal typing
-- Everything is an expresion mentality
-- Consistent and clean syntax
-- Clear naming (int -> Int, uint -> Nat, float -> Real, String -> Text, Vec -> List, && -> and, || -> or)
-- Enforced capitalization
-- Inmutable by default
+The full list of functionalities of the language can be found in the [roadmap](/roadmap.md), in the order that I plan to implement them. The general idea is to have all the features expected in a modern language, while also experimenting with some more foward looking ideas like effects and linear types.
 
-
-
-# Features of the tooling
-We all know that a language is only as usefull as it's tooling, so let's define my goals for perfect tooling
-
-- Fast, parallel compiler
-- Incremental compilation by default
-- Hot reloading
-- Compiles to native code
-- LSP from day 1
-	- Just installing the LSP should be enough, it can compile your code!
-- Great debugger experience thanks to [DAP](https://microsoft.github.io/debug-adapter-protocol/)
-- Auto formating with no options
-- Package manager
-- Profilers
+We want blossom to be easy to read and achieve the levels of simplicity that Go and Zig boast of having, even though in my opinion their path to simplicity is not the right one! I like abstraction and unified syntax, making implicit what should be implicit but always having access to it. That is a bit the philosofy of blossom, and that is what I try to respect when designing it
