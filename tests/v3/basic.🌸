@@ -1,0 +1,75 @@
+import std
+
+Timer := [start : Time, name : Text]
+
+new := (name : Text = "Timer") -> Timer {
+	return Timer::[start = std::now(), name]
+}
+
+drop := (timer : Timer) -> {
+	print(timer.name + ": " + (timer.start - std::now()).to_text)
+}
+
+even_numbers := () -> {
+	; This gets captured
+	counter := 0
+	return () -> Int { 
+		counter += 2
+		return counter
+	}
+}
+
+Bool := [True := [] or False := []]
+Color := [
+	Red := [] or 
+	Blue := [] or
+	Green := [] or
+	Yellow := [] or
+	Rgb := [r : Int, g : Int, b : Int] or
+	Hex := Text 
+]
+
+print_red_value := (color: Color) -> {
+	match color {
+		Red -> 255
+		Rgb::[r, _, _] -> r
+		_ -> 0
+	}.print
+}
+
+do_nothing := (timer: Timer) -> {
+	; Just call drop automatically
+}
+
+main := () -> {
+	timer := Timer::new()
+	{
+		timer1 := Timer::new("First")
+		timer2 := Timer::new("Second")
+		; First
+		; Second
+	}
+	even_generator := even_numbers()
+	even_generator().print ; 2
+	even_generator().print ; 4
+	even_generator().print ; 6
+
+	tuple : [Int, Int, Text] = [even_generator(), even_generator(), "Done!"]
+	tuple.print ; [8, 10, "Done!"]
+
+	{
+		timer3 := Timer::new("Third")
+		; Third
+	}
+
+	; Matches are not checked for exhaustivity
+	; Only `is` pattern allowed
+	match 3 > 2 {
+		Bool::True -> print("Nice")
+		False -> print("Something is broken...")
+	}
+	; Create a copy that gets passed to the function and call drop on that cloned value
+	do_nothing(timer) ; Timer
+
+	; Timer
+}

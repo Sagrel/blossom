@@ -15,6 +15,7 @@ Note that this page is just a roadmap, with checkboxes to track progres. It does
 		- [ ] If statement
 		- [ ] Comments
 		- [ ] Single file
+		- [ ] Code compiles and runs with errors, they get turned into runtime errors
 	- Tooling
 		- [ ] Basic CLI tool that compiles 1 file at a time
 			- [ ] Tokenizer
@@ -22,6 +23,7 @@ Note that this page is just a roadmap, with checkboxes to track progres. It does
 			- [ ] Bidirectional type checker with no unification pass
 			- [ ] Nice error reporting
 			- [ ] Code generation with Cranelift
+			- [ ] Interpreter
 			- [ ] Auto formating
 			- [ ] Stat collection (performance, number of instances, ...)
 			- [ ] Detailed tracing
@@ -42,6 +44,8 @@ Note that this page is just a roadmap, with checkboxes to track progres. It does
 			- [ ] Records (named fields)
 			- [ ] Variants (tagged unions)
 		- [ ] Closures
+		- [ ] Default arguments
+		- [ ] Match statement
 		- [ ] Automatically call `drop` at the end of the scope
 	- Tooling
 		- [ ] Simple LSP server
@@ -69,6 +73,8 @@ Note that this page is just a roadmap, with checkboxes to track progres. It does
 		- [ ] Maintenance
 - [ ] Blossom v6 - May I borrow that?:
 	- Language
+		- [ ] References
+		- [ ] Lifetimes
 		- [ ] Borrow checking
 	- Tooling
 		- [ ] Maintenance

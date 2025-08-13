@@ -1,0 +1,7 @@
+; These are funtions provided by the compiler.
+pub print : (value: Text) -> [] = external
+pub print : (value: Int) -> [] = external
+pub print : (left: Text, right, Int) -> [] = external
+
+; Not exposed
+print : (value: Bool) -> [] = external

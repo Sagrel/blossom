@@ -1,0 +1,3 @@
+nested := import src::depB
+
+pub dep_a := () -> {}

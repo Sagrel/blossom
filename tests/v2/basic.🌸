@@ -1,0 +1,23 @@
+; Imports everything into the current namespace
+import src::std
+
+; Import only the required dependencies and confines them to a new namespace
+deps := import src::depA::[nested::dep_b, dep_a]
+
+main := () -> {
+	; We can call as usual
+	print(69)
+	; Or specifying the namespace
+	std::print(69)
+	; Even full name spaces
+	src::std::print(69)
+	; Name spaces work with UFCS
+	69_420.std::print
+
+	; These work
+	deps::dep_a()
+	deps::dep_b()
+	; These don't! The program will still compile but fail at runtime
+	dep_a()
+	dep_b()
+}

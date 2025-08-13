@@ -1,5 +1,7 @@
-; This funtion is provided by the compiler.
-print := (value: Text) -> [] external
+; These are funtions provided by the compiler.
+print : (value: Text) -> [] = external
+print : (value: Int) -> [] = external
+print : (left: Text, right, Int) -> [] = external
 
 main := () -> {
 	; We can use UFCS and also omit the parentheses if there are no other arguments.
@@ -12,8 +14,16 @@ main := () -> {
 	add : (Int, Int) -> Int = (+)
 
 	if add(1, 2) == 3 and True {
-		print("1 + 2 = 3")
+		; Multiple lines are alowed, with no semi colons
+		print("1 + 2 = ", 
+			1 
+			+ 
+			2)
 	} else {
-		print("1 + 2 != 3")
+		print("1 + 2 != ", 1 + 2)
 	}
+
+	; This is a compile time error, but the executable is still generated
+	; If this line is reached, it will crash the program with the right error
+	print("Text" + 69)
 }
