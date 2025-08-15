@@ -1,0 +1,62 @@
+import std
+
+Timer := [start : Time, name : Text]
+
+new := (name : Text = "Timer") -> Timer {
+	return Timer::[start = std::now(), name]
+}
+
+print := (timer : ref Timer) -> {
+	print(timer.name + ": " + (timer.start - std::now()).to_text)
+}
+
+reset := (timer : ref mut Timer) -> {
+	timer.start = std::now()
+}
+
+drop := (timer : Timer) -> {
+	timer.print
+}
+
+
+; In the case of references, if no lifetime is specified, it creates a generic one
+; if one is specified, I have 2 ideas, using generics, and using relative Lifetimes
+
+; Fully anotated with generic lifetimes
+get := <K, V, Lifetime>(map : ref<Lifetime> Map, key: ref K) -> ref<Lifetime> V {
+	return map.at(key)
+}
+; Fully anotated with relative lifetimes
+get := <K, V>(map : ref Map, key: ref K) -> ref<map> V {
+	return map.at(key)
+}
+
+get_hello := <V>(map : ref Map) -> ref<map> V {
+	; Note that "hello" lives less than `map` or the returned reference, but that is ok!
+	return map.at("hello")
+}
+
+broken_lifetime := () -> ref Int {
+	; Note that the map dies in this function, and the return type of get_hello says that it will live as long as the map does, so this does not compile!
+	return Map::new([["hello", 1], ["world", 2]]).get_hello
+}
+
+main := () -> {
+
+	timer := Timer::new()
+	timer.print ; Print progress of the timer, without consuming it
+	
+	{
+		timer_ref := ref timer
+		timer.print ; This works, we can have 2 inmutable references at once 
+		timer.reset ; This does not work, we can't have a mutable reference and an inmutable one at the same time 
+	}
+
+	Map::new([["hello", 1], ["world", 2]]).get_hello.print ; prints 1
+	broken_lifetime() ; Fails
+
+
+	timer.drop ; Consumes the timer
+	timer.print; It has already been consumed, this fails!
+
+}
