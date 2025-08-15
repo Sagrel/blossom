@@ -1,0 +1,44 @@
+import std
+
+; Generic variant
+Result := <A, B>[Ok := A or Error := B]
+
+
+Animal := [
+	Cat := [name: Text]
+	Dog := [name: Text]
+]
+
+print_name_if := (animal : Animal) -> {
+	; Not forced to be exhaustive
+	; We can chain bindings and conditions with or/and
+	if animal is Cat::[name] or Dog::[name] and name <> "" {
+		name.print
+	}
+}
+
+print_name_if := (animal : Animal) -> {
+	; This is a version without the `is` operator, I'm still figuring out what I prefer
+	if [Cat::[name] or Dog::[name]] := animal and name <> "" {
+		name.print
+	}
+}
+
+print_name_match := (animal : Animal) -> {
+	; Match is basically syntactic sugar for `is` with exhaustivity checks
+	match animal {
+		Cat::[name] or Dog::[name] and name <> "" -> name.print
+		; Forced to handle all cases
+		_ -> return
+	}
+}
+
+main := () -> {
+	Cat::["lulu"].print_name_if ; prints lulu
+	Dog::[""].print_name_if ; prints nothing
+	Dog::["lulu"].print_name_match ; prints lulu
+	Cat::[""].print_name_match ; prints nothing
+
+	; We can do complex destructuring, and we can have an else in case the pattern does not match
+	[[x, y]=first, Cat::[n=name]] := [fist := [1, 2], Cat::["lulu"]] else { return }
+}

@@ -1,0 +1,48 @@
+import std
+
+; Generic variant
+Result := <A, B>[Ok := A or Error := B]
+
+; Type is infered from usage (Text) -> Result<Int, Text>
+parse := (text: Text) -> Result {
+	return if text.is_numeric {
+		Ok::[Int::from(text)]
+	} else {
+		Error::["Not a valid number"]
+	}
+}
+
+; An interface is defined just as a list of methods with no implementation
+Number := [
+	(+) : (Self, Self) -> Self,
+	(-) : (Self, Self) -> Self,
+	(*) : (Self, Self) -> Self,
+	(/) : (Self, Self) -> Self,
+]
+
+; We can define a generic stuct and give contraints to the underlying type
+Vec2 := <A : Number>[x: A, y: A]
+
+; We now define overloads for the basic operators using generics again
+(+) := <A : Number>(left: Vec2<A>, right: Vec2<A>) -> left: Vec2<A> {
+	return Vec2::[left.x + right.x, left.y + right.y]
+}
+(-) := <A : Number>(left: Vec2<A>, right: Vec2<A>) -> left: Vec2<A> {
+	return Vec2::[left.x - right.x, left.y - right.y]
+}
+(*) := <A : Number>(left: Vec2<A>, right: Vec2<A>) -> left: Vec2<A> {
+	return Vec2::[left.x * right.x, left.y * right.y]
+}
+(/) := <A : Number>(left: Vec2<A>, right: Vec2<A>) -> left: Vec2<A> {
+	return Vec2::[left.x / right.x, left.y / right.y]
+}
+
+; As we implemented the basic math operators for all Vec2, it implements Number and we can have a Vec2 of Vec2s!
+Mat2x2 := <A: Number>[Vec2<Vec2<A>>]
+main := () -> {
+
+	parse("69")
+	; The generics work just fine
+	mat : Mat2x2 = [[1, 2], [3, 4]]
+
+}
