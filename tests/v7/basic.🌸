@@ -1,0 +1,40 @@
+import std
+
+Double := effect (Int) -> Int
+
+; Cooroutine that takes a int, raises int and returns text
+cooroutine := (n : Int) -> Text, Int {
+	n := raise DoNothing(n)
+	n := raise DoNothing(n)
+	n := raise DoNothing(n)
+	return "Done!"
+}
+
+; This is the interface of all cooroutines
+Coro := <Args..., Effects, Return, Takes>[
+	; They can be started
+	new : (ref mut Self, Args...),
+	; And you can call next on them
+	next : (Takes) -> [Effect := Effects or Done := Return]
+]
+
+main := () -> {
+
+	; By default, calling a cooroutine will execute it until the end
+	assert(cooroutine(0) with { n : Int -> continue n } == "Done!")
+
+	; Calling coro on it will give you an opaque object that is basically a generator
+	underlying := cooroutine.coro
+	; This is equivalent to the call above
+	underlying.start(0)
+	value := None
+	assert (loop {
+		match underlying.next(value) {
+			Done::[result] -> break result,
+			Effect::[n : Int] -> value = n
+			; This branch in actually useles, there are not other effects in this case
+			Effect::[effect] -> value = raise effect
+		}
+	} == "Done!")
+	
+}

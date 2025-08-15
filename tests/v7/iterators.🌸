@@ -1,0 +1,70 @@
+import std
+
+Yield := <A>[
+	Next := A 
+	Done := []
+]
+
+; All functions will now have a return type and optionaly effects 
+; Denoted by -> ReturnType, Effect1, Effect2, Effect3
+yield := <A, B>(value: A) -> B, Yield {
+	return raise Yield::[value]
+}
+
+
+Iter := <A>() -> [], Yield[A]
+
+iter := <A>(self: List<A>) -> Iter<A> {
+	return () -> {
+		for i in 0..self.size {
+			self.at(i).yield
+		}
+	}
+}
+
+map := <A, B>(iter: Iter<A>, f: (A) -> B) -> Iter<B> {
+	return () -> {
+		for item in iter {
+			item.f.yield
+		}
+	}	
+}
+; Or we can remove the inner lambda with a call to into_iter
+map := <A, B>(iter: Iter<A>, f: (A) -> B) -> Iter<B> {
+	for item in iter {
+		item.f.yield
+	}
+}.into_iter
+
+filter := <A>(iter: Iter<A>, f: (ref A) -> Bool) -> Iter<A> {
+	return () -> {
+		for item in iter {
+			if item.f {
+				item.yield
+			}
+		}
+	}	
+}
+
+into_iter := <A, Args...>(f: (Args...) -> ([], Yield<A>), args...: Args...) -> Iter<A> {
+	return () -> {
+		f(args...)
+	}
+}
+
+even_numbers := () -> {
+	number := 0
+	loop {
+		number += 2
+		number.yield
+	}
+}.into_iter
+
+
+
+main := () -> {
+	; TODO Lambdas are a bit verbose... Think about making `return` optional
+	for number in even_numbers().map((x) -> {return x*x}).filter((x) -> {return x < 20}) {
+		number.print
+	}
+}

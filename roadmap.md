@@ -13,6 +13,7 @@ Note that this page is just a roadmap, with checkboxes to track progres. It does
 		- [ ] UFCS
 		- [ ] Function overloading
 		- [ ] If statement
+		- [ ] Loop statement + continue + break
 		- [ ] Comments
 		- [ ] Single file
 		- [ ] Code compiles and runs with errors, they get turned into runtime errors

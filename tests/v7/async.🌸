@@ -1,0 +1,74 @@
+import std
+
+read_file : (path: Text) -> Text, IO = external
+
+Async := <A>() -> A, IO
+
+into_iter := <A, Args...>(f: (Args...) -> ([], Yield<A>), args...: Args...) -> Iter<A> {
+	return () -> {
+		f(args...)
+	}
+}
+
+concurrent := (left: Coro, right: Coro) -> {
+	left_result := None
+	right_result := None
+	loop {
+		if left_result == None {
+			match left.next {
+				Done::[result] -> left_result = result
+				Effect::[effect] -> raise effect
+			}
+		}
+		if right_result == None {
+			match right.next {
+				Done::[result] -> right_result = result
+				Effect::[effect] -> raise effect
+			}
+		}
+		if left_result <> None and right_result <> None {
+			return [left_result.value, right_result.value] 
+		}
+	}
+}
+
+concurrent := (spawner) -> {
+	; TODO
+}
+
+accept_connection : () -> Connection, IO = external
+handle_connection : (Connection) -> [], IO = external
+
+
+spawn := <A, Args...>(f: (Args...) -> ([], Yield<A>), args...: Args...) -> Iter<A> {
+	return () -> {
+		f(args...)
+	}
+}
+
+
+main := () -> {
+	; Both reads happen concurrently, so using something like io_uring will make it twice as fast!
+	[a, b] := concurrent(read_file.coro("a.txt"), read_file.coro("b.txt"))
+
+	concurrent(() -> {
+		loop {
+			; Waits for a connection
+			connection := accept_connection()
+			; Spawns a new async task, that will be executed concurrently from the others
+			handle_connection.spawn(collection)
+		}
+	})
+	
+	[a, b, c, d] := concurrent(() -> {
+		; Spawns a bunch of tasks and keeps handles to them
+		a_task := read_file.spawn("a.txt")
+		b_task := read_file.spawn("b.txt")
+		c_task := read_file.spawn("c.txt")
+		d_task := read_file.spawn("d.txt")
+
+		; Concurrently wait for all of them to be finished and return it
+		return [a_task.wait, b_task.wait, c_task.wait, d_task.wait]
+	})
+	
+}
