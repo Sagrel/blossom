@@ -1,6 +1,11 @@
+use string_interner::{
+    StringInterner,
+    backend::{Backend, StringBackend},
+};
+
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum Kind {
-    Number,
+    Number(<StringBackend as Backend>::Symbol),
     Plus,
     Minus,
     Multiply,
@@ -34,7 +39,7 @@ pub enum Kind {
     In,
     Import,
     // Fallbacks
-    Identifier,
+    Identifier(<StringBackend as Backend>::Symbol),
     Unknown,
 }
 
@@ -47,11 +52,16 @@ pub struct Token {
 struct Parser<'a> {
     input: &'a str,
     pos: usize,
+    interner: StringInterner<StringBackend>,
 }
 
 impl<'a> Parser<'a> {
     pub fn new(input: &'a str) -> Self {
-        Parser { input, pos: 0 }
+        Parser {
+            input,
+            pos: 0,
+            interner: StringInterner::default(),
+        }
     }
 
     fn consume_while(&mut self, predicate: impl Fn(char) -> bool) -> (usize, &'a str) {
@@ -152,7 +162,7 @@ impl<'a> Parser<'a> {
         let (start, consumed) = self.consume_while(char::is_numeric);
         if !consumed.is_empty() {
             return Some(Token {
-                kind: Kind::Number,
+                kind: Kind::Number(self.interner.get_or_intern(consumed)),
                 span: (start, self.pos),
             });
         }
@@ -211,21 +221,21 @@ impl<'a> Parser<'a> {
                 }
                 _ => {
                     return Some(Token {
-                        kind: Kind::Identifier,
+                        kind: Kind::Identifier(self.interner.get_or_intern(consumed)),
                         span: (start, self.pos),
                     });
                 }
             }
         }
 
-		if self.peek().is_some() {
-			// If we reach here, we have an unknown character
-			self.pos += 1; // Consume the unknown character
-			return Some(Token {
-				kind: Kind::Unknown,
-				span: (self.pos - 1, self.pos),
-			});
-		}
+        if self.peek().is_some() {
+            // If we reach here, we have an unknown character
+            self.pos += 1; // Consume the unknown character
+            return Some(Token {
+                kind: Kind::Unknown,
+                span: (self.pos - 1, self.pos),
+            });
+        }
 
         // If we reach here, we have no valid token
         return None;
@@ -233,13 +243,13 @@ impl<'a> Parser<'a> {
     // Additional methods for parsing would go here
 }
 
-pub fn parse(input: &str) -> Vec<Kind> {
+pub fn parse(input: &str) -> (Vec<Token>, StringInterner<StringBackend>) {
     let mut parser = Parser::new(input);
     let mut tokens = Vec::new();
 
     while let Some(token) = parser.next() {
-        tokens.push(token.kind);
+        tokens.push(token);
     }
 
-    tokens
+    (tokens, parser.interner)
 }
