@@ -9,25 +9,26 @@ Note that this page is just a roadmap, with checkboxes to track progres. It does
 - [ ] Blossom v1 - The beggining:  
 	- Language
 		- [ ] Basic support for primitive types and literals: Text, Int, Real, Bool, Lambda, ...
-		- [ ] Basic support for defining external functions
+		- [X] Basic support for defining external functions
 		- [ ] UFCS
 		- [ ] Function overloading
-		- [ ] If statement
-		- [ ] Loop statement + continue + break
-		- [ ] Comments
-		- [ ] Single file
+		- [X] If statement
+		- [X] Loop statement + continue + break
+		- [X] Comments
+		- [X] Single file
 		- [ ] Code compiles and runs with errors, they get turned into runtime errors
 	- Tooling
 		- [ ] Basic CLI tool that compiles 1 file at a time
-			- [ ] Tokenizer
-			- [ ] Flat Ast parser
+			- [X] Tokenizer
+			- [X] Interner
+			- [X] Flat Ast parser
 			- [ ] Bidirectional type checker with no unification pass
 			- [ ] Nice error reporting
 			- [ ] Code generation with Cranelift
 			- [ ] Interpreter
 			- [ ] Auto formating
 			- [ ] Stat collection (performance, number of instances, ...)
-			- [ ] Detailed tracing
+			- [X] Detailed tracing
 			- [ ] Setup for snapshot and fuzz testing
 - [ ] Blossom v2 - Expanding:
 	- Language

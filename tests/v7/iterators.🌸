@@ -35,6 +35,12 @@ map := <A, B>(iter: Iter<A>, f: (A) -> B) -> Iter<B> {
 		item.f.yield
 	}
 }.into_iter
+; Or we can use a handler!
+map := <A, B>(iter: Iter<A>, f: (A) -> B) -> Iter<B> {
+	iter() with {
+		Yield::[x] -> continue x.f.yield
+	}
+}
 
 filter := <A>(iter: Iter<A>, f: (ref A) -> Bool) -> Iter<A> {
 	return () -> {

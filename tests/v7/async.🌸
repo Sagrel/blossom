@@ -4,11 +4,6 @@ read_file : (path: Text) -> Text, IO = external
 
 Async := <A>() -> A, IO
 
-into_iter := <A, Args...>(f: (Args...) -> ([], Yield<A>), args...: Args...) -> Iter<A> {
-	return () -> {
-		f(args...)
-	}
-}
 
 concurrent := (left: Coro, right: Coro) -> {
 	left_result := None
@@ -46,18 +41,46 @@ spawn := <A, Args...>(f: (Args...) -> ([], Yield<A>), args...: Args...) -> Iter<
 	}
 }
 
+async := <A, Args...>(f: (Args...) -> (A, IO), args...: Args...) -> Coro<IO, A> {
+	; Magic?
+}
+
+
+concurrent := <A>(spawner: () -> A, Spawn) -> {
+
+	tasks := List<Coro>::new()
+	
+
+	spawner() with {
+		Spawn::[task], continue_spawner -> {
+			tasks.add(task)
+			task() with {
+				IO::[job] -> {
+					result := raise job
+					continue_spawner()
+					continues result
+				}
+			}
+		}
+		IO::[job] -> 
+	}
+}
 
 main := () -> {
 	; Both reads happen concurrently, so using something like io_uring will make it twice as fast!
 	[a, b] := concurrent(read_file.coro("a.txt"), read_file.coro("b.txt"))
 
 	concurrent(() -> {
-		loop {
-			; Waits for a connection
-			connection := accept_connection()
+		; Starts a server on localhost:8080, this is a blocking call
+		server := start_server("localhost", 8080)
+
+		; Waits for a connection and exits the loop when the server is closed
+		for connection in server.accept_connections() {
 			; Spawns a new async task, that will be executed concurrently from the others
+			; We don not care about the resut, so we do not take a handle to it
 			handle_connection.spawn(collection)
 		}
+		; In the end, we automatically wait for all the tasks to finish
 	})
 	
 	[a, b, c, d] := concurrent(() -> {
